@@ -70,6 +70,7 @@ required_apps = ["erpnext"]
 
 # before_install = "agriculture.install.before_install"
 # after_install = "agriculture.install.after_install"
+after_install = "agriculture.agriculture.setup.setup_agriculture"
 
 # Uninstallation
 # ------------
