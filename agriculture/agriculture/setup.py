@@ -7,6 +7,7 @@ def setup_agriculture():
 		# already setup
 		return
 	create_agriculture_data()
+	add_additional_permissions()
 
 def create_agriculture_data():
 	records = [
@@ -427,3 +428,38 @@ def create_agriculture_data():
 			linked_doctype='Weather')
 	]
 	insert_record(records)
+
+def add_additional_permissions():
+	frappe.get_doc({
+		"doctype": "Custom DocPerm",
+		"parent": "Location",
+		"role": "Agriculture Manager",
+		"create": 1,
+		"delete": 1,
+		"email": 1,
+		"export": 1,
+		"print": 1,
+		"read": 1,
+		"report": 1,
+		"share": 1,
+		"write": 1
+	}).insert()
+
+	frappe.get_doc({
+		"doctype": "Custom DocPerm",
+		"parent": "Location",
+		"role": "Agriculture User",
+		"email": 1,
+		"export": 1,
+		"print": 1,
+		"read": 1,
+		"report": 1,	
+		"share": 1,
+		"write": 1
+	}).insert()
+
+def cleanup_role_and_permissions():
+	for role in ["Agriculture Manager", "Agriculture User"]:
+		frappe.db.delete("Custom DocPerm", {"role": role})
+		frappe.db.delete("Role", role)
+	frappe.db.commit()
